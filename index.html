@@ -16,21 +16,27 @@
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Instrument+Sans:wght@400..700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --ground:#EDEEEC; --surface:#F8F8F6; --sunk:#E2E5E3; --ink:#1B2430; --ink2:#4A5564; --line:#CFD3D1;
-  --gold:#D4A03C; --onGold:#1B2430;
-  --bronze:#7E5210; --bronzeBg:#F1E4C2;
-  --rose:#9C3B46; --roseBg:#F2DADD;
-  --teal:#25655F; --tealBg:#D3E8E5;
-  --focus:#2F6FEB; --scrim:rgba(14,19,26,.55);
-  --bubbleIn:#FFFFFF; --bubbleOut:#D9EFE6; --chat:#E4E2DA;
+  /* Dark navy sidebar + light content, one bright blue accent (sampled from brand reference) */
+  --ground:#F3F5FA; --surface:#FFFFFF; --sunk:#EEF1F6; --ink:#161A2E; --ink2:#6B7280; --line:#E2E6EF;
+  --accent:#2F6FEB; --onAccent:#FFFFFF; --accentBg:#E9F1FF;
+  --gold:var(--accent); --onGold:var(--onAccent);
+  --bronze:#8A6A1F; --bronzeBg:#F3EDDD;
+  --rose:#C23D4B; --roseBg:#FAE3E6;
+  --teal:#1FA568; --tealBg:#E1F5EA;
+  --focus:#2F6FEB; --scrim:rgba(13,15,30,.55);
+  --bubbleIn:#FFFFFF; --bubbleOut:var(--accentBg); --chat:#EEF1F6;
+  --sidebar-bg:#0F102E; --sidebar-ink:#ECEEF8; --sidebar-ink2:#9195B8; --sidebar-line:rgba(255,255,255,.09); --sidebar-active:var(--accent);
   --display:'Bricolage Grotesque','Segoe UI',system-ui,-apple-system,'Noto Sans Tamil',sans-serif;
   --body:'Instrument Sans','Segoe UI',system-ui,-apple-system,'Noto Sans Tamil',sans-serif;
 }
 @media (prefers-color-scheme:dark){
   :root{
-    --ground:#12171E; --surface:#1A212A; --sunk:#232B36; --ink:#E8EBEE; --ink2:#A7B0BC; --line:#2E3744;
-    --bronze:#E7C070; --bronzeBg:#3A2E14; --rose:#F0A0A8; --roseBg:#3B2226; --teal:#7FD0C5; --tealBg:#153029;
-    --focus:#7EA6FF; --scrim:rgba(0,0,0,.65); --bubbleIn:#232B36; --bubbleOut:#1D3A33; --chat:#161C24;
+    --ground:#10111C; --surface:#181A2A; --sunk:#1F2133; --ink:#ECEEF8; --ink2:#9195B8; --line:#2A2D42;
+    --accent:#5B8FF9; --onAccent:#0B1024; --accentBg:#1C2742;
+    --gold:var(--accent); --onGold:var(--onAccent);
+    --bronze:#D8B463; --bronzeBg:#302A16; --rose:#E0858C; --roseBg:#35211F; --teal:#4FC98A; --tealBg:#15301F;
+    --focus:#7EA6FF; --scrim:rgba(0,0,0,.6); --bubbleIn:#1F2133; --bubbleOut:var(--accentBg); --chat:#14151F;
+    --sidebar-bg:#07081A; --sidebar-ink:#ECEEF8; --sidebar-ink2:#80849E; --sidebar-line:rgba(255,255,255,.07); --sidebar-active:var(--accent);
   }
 }
 html{height:100%}
@@ -45,16 +51,20 @@ button{cursor:pointer}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 
 .shell{display:grid;grid-template-columns:224px minmax(0,1fr);min-height:100%}
-.side{position:sticky;top:0;align-self:start;padding:22px 14px;display:flex;flex-direction:column;gap:22px}
-.brand{padding:0 10px}
-.brand b{font-family:var(--display);font-size:20px;letter-spacing:-.02em;display:block}
-.brand span{font-size:13px;color:var(--ink2)}
+.side{position:sticky;top:0;align-self:start;padding:0;display:flex;flex-direction:column;background:var(--sidebar-bg);min-height:100vh;color:var(--sidebar-ink)}
+.brand{background:#FFFFFF;padding:16px 14px}
+.brand img{width:100%;max-width:190px;height:auto;display:block}
+.side-body{padding:18px 14px 22px;display:flex;flex-direction:column;gap:18px}
+.side-caption{font-size:12px;color:var(--sidebar-ink2);padding:0 10px;margin-top:-6px}
 .nav{display:flex;flex-direction:column;gap:2px}
-.nav button{display:flex;align-items:center;gap:12px;padding:10px 12px;border:0;background:none;border-radius:8px;text-align:left;color:var(--ink2);font-weight:500}
-.nav button:hover{background:var(--sunk);color:var(--ink)}
-.nav button[aria-current="page"]{background:var(--ink);color:var(--surface)}
+.nav button{display:flex;align-items:center;gap:12px;padding:10px 12px;border:0;background:none;border-radius:8px;text-align:left;color:var(--sidebar-ink2);font-weight:500}
+.nav button:hover{background:rgba(255,255,255,.06);color:var(--sidebar-ink)}
+.nav button[aria-current="page"]{background:var(--sidebar-active);color:var(--onAccent)}
 .nav svg,.tabbar svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
-.sidenote{margin:0 10px;padding:12px;border:1px solid var(--line);border-radius:10px;font-size:13px;color:var(--ink2);display:flex;flex-direction:column;gap:8px}
+.sidenote{margin:0 10px;padding:12px;border:1px solid var(--sidebar-line);border-radius:10px;font-size:13px;color:var(--sidebar-ink2);display:flex;flex-direction:column;gap:8px}
+.sidenote .btn.ghost{color:var(--sidebar-ink);border-color:var(--sidebar-line)}
+.sidenote .btn.ghost:hover{background:rgba(255,255,255,.08)}
+.sidenote p.small{color:var(--sidebar-ink2)}
 main{padding:22px 28px 60px;min-width:0}
 .top{display:flex;flex-wrap:wrap;align-items:center;gap:12px;justify-content:space-between;margin-bottom:22px}
 .top .who{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
@@ -83,7 +93,7 @@ label.f span.h{font-weight:400}
 .small{font-size:13px}
 .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 .spread{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}
-.panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px;box-shadow:0 1px 2px rgba(0,0,0,.03)}
 .panel > h2{margin-bottom:12px}
 .grid2{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:18px;align-items:start}
 .stack{display:flex;flex-direction:column;gap:18px}
@@ -181,7 +191,7 @@ th{font-weight:600;color:var(--ink2);border-top:0;font-size:13px}
   .grid2{grid-template-columns:1fr}
   .tabbar{display:grid;grid-template-columns:repeat(5,1fr);position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--surface);border-top:1px solid var(--line);padding:6px 4px calc(6px + env(safe-area-inset-bottom,0px))}
   .tabbar button{display:flex;flex-direction:column;align-items:center;gap:2px;border:0;background:none;color:var(--ink2);font-size:11.5px;min-height:48px}
-  .tabbar button[aria-current="page"]{color:var(--ink);font-weight:700}
+  .tabbar button[aria-current="page"]{color:var(--accent);font-weight:700}
   .sheet{padding:14px 14px 30px}
   .form{grid-template-columns:1fr}
   .col{flex-basis:78vw}
@@ -841,9 +851,9 @@ function vLost(x){
 function render(){
   if(!S.me)return;
   var app=$('app'),board=$('board'),bl=board?board.scrollLeft:0,sy=window.scrollY;
-  var u=S.me,h='<div class="shell"><aside class="side"><div class="brand"><b>Lifeimpressions</b><span>Studio tracker</span></div><nav class="nav" aria-label="Main">'+
+  var u=S.me,h='<div class="shell"><aside class="side"><div class="brand"><img src="brand-logo.png" alt="Lifeimpressions"></div><div class="side-body"><span class="side-caption">Studio tracker</span><nav class="nav" aria-label="Main">'+
     NAV.map(function(n){return '<button data-a="nav" data-v="'+n[0]+'"'+(S.view===n[0]?' aria-current="page"':'')+'>'+svg(n[2])+n[1]+'</button>';}).join('')+
-    '</nav><div class="sidenote"><span>Signed in as <b>'+esc(u.name)+'</b><br>'+(u.role==='admin'?'Admin, all locations':esc(locName(u.location_id)))+'</span>'+pushWidget('sm')+'<button class="btn sm ghost" data-a="signout">Sign out</button></div></aside><main class="'+(S.busy?'busy':'')+'">';
+    '</nav><div class="sidenote"><span style="color:var(--sidebar-ink)">Signed in as <b style="color:var(--sidebar-ink)">'+esc(u.name)+'</b><br>'+(u.role==='admin'?'Admin, all locations':esc(locName(u.location_id)))+'</span>'+pushWidget('sm')+'<button class="btn sm ghost" data-a="signout">Sign out</button></div></div></aside><main class="'+(S.busy?'busy':'')+'">';
   h+='<div class="top"><h1>'+TITLES[S.view]+'</h1><div class="who">';
   if(u.role==='admin')h+='<label class="field-inline">Location <select data-change="loc" aria-label="Location">'+opt([{v:'all',l:'All locations'}].concat((S.ref.locations||[]).map(function(l){return {v:l.id,l:l.name};})),S.locFilter)+'</select></label>';
   h+='<button class="btn ghost" data-a="refresh">Refresh</button>';
