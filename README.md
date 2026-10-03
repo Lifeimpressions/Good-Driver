@@ -1,19 +1,43 @@
-# Good Driver
-### Road safety for everyone
+# Studio Tracker app: put it online (GitHub Pages)
 
-A mobile-friendly web app for road safety awareness, built for the Appathon.
+This folder is the staff app: `index.html` (the whole app) and `config.js` (your Supabase address and public key).
 
-## Features
-- **Good Driver test (driving game)** – drive past 10 road signs and react correctly (stop, slow down, keep left, don't overtake, no horn…). Score 10/10 to pass; otherwise drive again. Passing unlocks a **Good Driver badge sticker** with a QR code that opens the test (`index.html#game`), so other drivers who scan it can earn their own badge.
-- **Traffic sign learning** – 22 Indian road signs (mandatory, cautionary, informatory) with progress tracking
-- **Road safety quiz** – 10 random questions per round with instant explanations and best-score tracking
-- **Safe ride check** – pre-ride checklist for two-wheelers and cars, plus a break reminder timer
-- **Helmet & seatbelt awareness** – facts (WHO, MoRTH), Motor Vehicles Act fines, myths vs facts
-- **EV dashboard mode (journey lock)** – for long trips, the vehicle stays in 20 km/h limited mode until sensor checks (seatbelt/helmet, tyre pressure, battery vs route, brakes, driver alertness) and driver confirmations are complete. Includes an emergency override that is logged. Open with `index.html#dashboard`.
-- **Emergency SOS** – press-and-hold SOS with GPS location message, emergency numbers (112, 108, 100, 101, 1033), saved contacts and golden-hour first aid
+## Before you start
+Supabase must be ready: `01_schema.sql`, `02_staff.sql` run, and the access tests all PASS (see the Launch Guide).
 
-## Tech
-Single-file HTML, CSS and JavaScript. No install or build step. Data is saved in the browser (localStorage). Works on phones and laptops, in light and dark mode.
+## Step 1: Add your Supabase details
+1. Supabase > Project Settings > API
+2. Copy the **Project URL** and the **anon public** key into `config.js`
+3. **Never** paste the `service_role` key or the database password anywhere in these files. The anon key is meant to be visible; the database rules protect the data
 
-## Run it
-Open `index.html` in any browser, or visit the live site on GitHub Pages.
+## Step 2: Publish on GitHub Pages
+1. In your GitHub repository (public), upload `index.html` and `config.js` at the top level
+2. Repository Settings > Pages > Source: **Deploy from a branch**, Branch: **main**, folder **/ (root)**
+3. After a minute, the site is live at `https://<your-github-name>.github.io/<repository-name>/`
+
+## Step 3: Tell Supabase the address
+Supabase > Authentication > URL Configuration: set the Site URL to your GitHub Pages address.
+
+## Step 4: First sign-in
+1. Open the address and sign in as Keerthi
+2. Check: the location filter shows all three locations; Settings lists all three staff
+3. Sign out, sign in as Prabha: only Salem appears, and the location selector is missing
+4. On each phone, open the address and choose **Add to Home Screen**
+
+## What the app does with the database
+| Action in the app | What the database does |
+|---|---|
+| New booking | Creates the customer, order and job; assigns the location's person; needs consent |
+| Move a stage | Checks the rules (photo before layout, approval before fixing, QC before ready) and records who moved it |
+| Upload a photo, layout or QC photo | Compresses to about 1 MB, stores it privately under the location's folder |
+| Approve QC | Allowed for head office only (default) |
+| Approve or request changes | Not possible from the app. Only the customer's WhatsApp reply can record it (needs the WhatsApp step) |
+
+If a rule blocks an action, the app shows the database's message in plain words.
+
+## Known limits of this version
+- Messages appear in each job's phone panel only after the WhatsApp connection is built
+- Prices, staff and stage targets are edited in Supabase's Table Editor for now
+- The app loads all jobs on each refresh. That is fine at 15-20 orders a month; add paging if volume grows a lot
+- The Supabase library loads from a public content network. For a locked-down version, host a copy of it in the repository
+- Tested against a simulated Supabase (all screens, rules and errors). It has not yet run against your real project, so do the Step 4 checks and report anything odd
